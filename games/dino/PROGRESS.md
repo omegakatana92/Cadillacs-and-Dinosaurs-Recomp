@@ -136,8 +136,8 @@ sound driver: 0 instructions had no translation
 
 The Linux build found that the launcher's own compile of the toolkit's `machine/kabuki.cpp` needs
 `<cstddef>` for `size_t` under GCC (MinGW's headers happen to supply it). The toolkit copy is
-unchanged: `Makefile` and `tools/release/lib.sh` give the launcher the include with
-`-DCMAKE_CXX_FLAGS="-include cstddef"`.
+unchanged: the `Makefile` exports `CXXFLAGS` with `-include cstddef` (CMake reads it when it first
+configures a build folder), and `tools/release/lib.sh` passes the same flag explicitly.
 
 The first CI run found that `cps2recomp/recomp-common/COMMIT` had been written with CRLF line
 endings (a Windows text write). It was rewritten with LF and `cps2recomp/COMMIT` re-recorded with

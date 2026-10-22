@@ -57,7 +57,9 @@ build_programs() {
         -DGAME_DIR="$ROOT/games/$GAME" -DWORK_DIR="$generated" \
         -DCMAKE_PREFIX_PATH="$DEPS/sdl-linux" -DCMAKE_EXE_LINKER_FLAGS="-static-libstdc++ -static-libgcc" >/dev/null
     cmake --build "$build/game" --target "$GAME"
+    # (<cstddef>: kabuki.h uses size_t without including it, which GCC on Linux rejects)
     cmake -S "$ROOT/cps2recomp/launcher" -B "$build/launcher" -G Ninja -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_FLAGS="-include cstddef" \
         -DGAME_NAME="$(cfg name)" -DGAME_EXE="$GAME" -DAPP_ID="$(cfg app_id)" \
         -DHOME_ENV="$(echo "$GAME" | tr a-z A-Z)_HOME" -DDISCLAIMER="$(cfg disclaimer)" \
         -DROM_SET="$(cfg rom_set)" -DROM_PARENT="$(cfg rom_parent)" -DROM_NAME="$(cfg rom_name)" \

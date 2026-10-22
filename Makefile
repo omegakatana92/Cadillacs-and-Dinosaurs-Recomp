@@ -40,6 +40,26 @@ deps: port
 		echo "deps: nothing to copy here (not a MinGW build)"; \
 	fi
 
+# The launcher compiles the toolkit's machine/kabuki.cpp on its own, and kabuki.h uses size_t
+# without including <cstddef>: MinGW's headers happen to supply it, GCC on Linux does not. The
+# toolkit copy is not changed; every launcher source is given the include instead. (This replaces
+# the toolkit's own launcher recipe, which does the same build without the flag.)
+launcher: port
+	@cmake -S $(CR)/launcher -B $(B)/launcher -G Ninja -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(CURDIR)/$(B) \
+	  -DCMAKE_CXX_FLAGS="-include cstddef" \
+	  -DGAME_NAME="$(shell $(CFG) name $(GAME))" -DGAME_EXE=$(GAME) \
+	  -DAPP_ID=$(shell $(CFG) app_id $(GAME)) -DHOME_ENV=$(shell echo $(GAME) | tr a-z A-Z)_HOME \
+	  -DDISCLAIMER="$(shell $(CFG) disclaimer $(GAME))" \
+	  -DROM_SET="$(shell $(CFG) rom_set $(GAME))" -DROM_PARENT="$(shell $(CFG) rom_parent $(GAME))" \
+	  -DROM_NAME="$(shell $(CFG) rom_name $(GAME))" -DROM_PROGRAM="$(shell $(CFG) program $(GAME))" \
+	  -DROM_GRAPHICS="$(shell $(CFG) graphics $(GAME))" -DROM_SOUND_PROGRAM="$(shell $(CFG) sound_program $(GAME))" \
+	  -DROM_SAMPLES="$(shell $(CFG) samples $(GAME))" -DROM_KEY="$(shell $(CFG) key $(GAME))" \
+	  -DDISPLAY_SWITCHES="$(shell $(CFG) display $(GAME))" \
+	  -DPLAYERS="$(shell $(CFG) players $(GAME))" -DBUTTONS="$(shell $(CFG) buttons $(GAME))" \
+	  -DBOARD="$(shell $(CFG) board $(GAME))" -DCPS_B="$(shell $(CFG) cps_b $(GAME))" > /dev/null
+	@cmake --build $(B)/launcher
+	@echo "built $(B)/$(GAME)-launcher"
+
 # The toolkit copy is what cps2recomp/COMMIT recorded (tools/sync-toolkit.sh).
 check-toolkit:
 	@tools/sync-toolkit.sh --check

@@ -134,6 +134,10 @@ sound driver: 0 instructions had no translation
 - `make check-toolkit`: `cps2recomp/: commit 5da369633cfe81357bbf3c9824718ad73563f020`.
 - `make check-common`: `recomp-common/: commit 91b4e510642ed0820f2a56a7dd71f3d2d7104266`.
 
+The first CI run found that `cps2recomp/recomp-common/COMMIT` had been written with CRLF line
+endings (a Windows text write). It was rewritten with LF and `cps2recomp/COMMIT` re-recorded with
+`tools/sync-toolkit.sh --record`; the checks above then pass on Linux as well as in MSYS2.
+
 ## Not done yet
 
 - Five pieces of music not placed (fanfares played once), and the ending not reached.

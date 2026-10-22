@@ -1,0 +1,15 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Cadillacs and Dinosaurs",
+  "wikidata": "Q1025042",
+  "system": "Arcade",
+  "type": "recomp",
+  "original": {"region": "World", "revision": "930201"},
+  "project": "Cadillacs and Dinosaurs Recomp",
+  "status": "in-progress",
+  "targets": ["Windows", "Linux", "Steam Deck"],
+  "toolchain": "cps2recomp",
+  "approach": "Static recompilation of the CPS-1 board's 68000 program and QSound Z80 program to C++, on its own machine with no emulator",
+  "maintainers": [{"name": "omegakatana92", "link": "https://github.com/omegakatana92"}],
+  "tags": ["CPS-1", "beat-'em-up", "QSound"]
+}
